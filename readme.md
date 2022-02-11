@@ -1,24 +1,21 @@
-# Timeseries to image generator
+# Timeseries to image converter 
+
+
 
 # Example output 
 
-Gramian angle summation field output for a computer monitor.
+Gramian angle summation field output for a computer monitor and washing machine.
 <p float="center">
     <img src="/imgs/iawe-computer-gasf.png" width="250" />
-</p>
-
-Gramian angle summation filed timeseries output of an washing machine. 
-<p float="center">
     <img src="/imgs/iawe-washm-gaf.png" width="250" />
 </p>
 
-Trasfomation examples for many appliances 
+Trasfomation examples for many appliances.
 <p float="center">
-    <img src="/imgs/gaf_matrix.png" width="500" />
-
+    <img src="/imgs/gaf_matrix.png" width="700" />
 </p>
 
-# Usage 
+# Install instructions  
 
 * Install [NILMTK](https://github.com/nilmtk/nilmtk) by following instructions [here](https://github.com/nilmtk/nilmtk/blob/master/docs/manual/user_guide/install_user.md)
 
