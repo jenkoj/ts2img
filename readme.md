@@ -15,13 +15,14 @@ Gramian angle summation filed timeseries output of an washing machine.
 Trasfomation examples for many appliances 
 <p float="center">
     <img src="/imgs/gaf_matrix.png" width="500" />
-    
+
 </p>
+
 # Usage 
 
 * 1. Install [NILMTK](https://github.com/nilmtk/nilmtk) by following instructions [here](https://github.com/nilmtk/nilmtk/blob/master/docs/manual/user_guide/install_user.md)
 
-** ❗️ you may need to downgrade matplotlib dependency to an older version due to depenedcy related issues 
+* * ❗️ you may need to downgrade matplotlib dependency to an older version due to depenedcy related issues 
 
 * 2. Install [pyts](pyts.readthedocs.io) by running
 
