@@ -36,7 +36,7 @@ Trasfomation examples for selected appliances
 
 # Install instructions  
 
-* Install [NILMTK](https://github.com/nilmtk/nilmtk) by following instructions [here](https://github.com/nilmtk/nilmtk/blob/master/docs/manual/user_guide/install_user.md).
+* Install [NILMTK](https://github.com/nilmtk/nilmtk) by following instructions [here](https://github.com/nilmtk/nilmtk/blob/master/docs/manual/user_guide/install_user.md) .
 
     *  ❗️ You may need to downgrade Matplotlib to an older version due to dependency-related issues.
 
