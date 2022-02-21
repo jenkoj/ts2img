@@ -45,6 +45,11 @@ Trasfomation examples for selected appliances
     ```bash
         pip install pyts
     ```
+* Install [h5py](h5py.org) by running:
+
+    ```bash
+        pip install h5py
+    ```
 
 *  Get hold of a converted dataset or convert your dataset.
 
