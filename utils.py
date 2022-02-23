@@ -399,7 +399,7 @@ def append_images(img,img_stack, img_stack_tmp, sig, sig_stack, sig_stack_tmp, t
     delta = time_stamp[0] - last_stamp
     last_stamp = time_stamp[-1]
 
-    if delta <= par["allowed_delta_between_images"] or img_stack_tmp.shape[0] == 0: 
+    if delta <= par["allowed_delta_between_frames"] or img_stack_tmp.shape[0] == 0: 
         #append only if images are strictly in series
         img_stack_tmp = np.append(img_stack_tmp, img, axis=0)
         sig_stack_tmp = np.append(sig_stack_tmp, sig, axis=0)
