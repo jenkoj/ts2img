@@ -10,7 +10,7 @@ def get_path() -> str:
     p = Path().cwd().joinpath("out")
     p.mkdir(exist_ok=True)
 
-    return str(p)
+    return str(p)+"/"
 
 path = get_path()
 

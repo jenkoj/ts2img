@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from log import print_log 
+from utils.log import print_log 
 
 
 def mount_data(meter: pd.DataFrame, par: dict) -> np.ndarray:
@@ -38,7 +38,7 @@ def mount_data(meter: pd.DataFrame, par: dict) -> np.ndarray:
     return [ts, time_stamps]
 
 
-def append_images(img: np.ndarray, img_stack: np.ndarray, img_stack_tmp: np.ndarray, sig: np.ndarray, sig_stack: np.ndarray, sig_stack_tmp: np.ndarray, time_stamp: np.ndarray, last_stamp: int, par: dict) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, int]:
+def append_images(img: np.ndarray, img_stack: np.ndarray, img_stack_tmp: np.ndarray, sig: np.ndarray, sig_stack: np.ndarray, sig_stack_tmp: np.ndarray, time_stamp: np.ndarray, last_stamp: int, par: dict):
     """
     Appends images and ts to main array.
     In case of video, it first appends N images to temporary array, and then to main array.   

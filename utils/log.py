@@ -1,18 +1,18 @@
 import numpy as np
 import datetime
-from file_handling import get_file_name, get_path
+from utils.file_handling import get_file_name, get_path
 
 path = get_path()
 
 
-def print_parameters(appliances: list, par: dict) -> None:
+def print_parameters(par: dict) -> None:
     """
     Prints user defined parameters. 
     """
     print_log(par,
         "dataset name: ",par["dataset_name"],", date : ",datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')," \n"
 
-        " using appliances: ", appliances,"\n"
+        " using appliances: ", par['appliances'],"\n"
 
         " transtype: ",par["trs_type"],"\n"
         " gaf trans type: "f"{par['trs_type_gaf']}","\n"
@@ -23,13 +23,13 @@ def print_parameters(appliances: list, par: dict) -> None:
         " sample period: "f"{par['sample_period']}","\n"
 
         " number if images that are stacked together and in series(series!): "f"{par['frames']}","\n"
-        " allowed max delta between images  "f"{par['allowed_delta_between_images']}","\n"
+        " allowed max delta between images  "f"{par['allowed_delta_between_frames']}","\n"
 
         " added brightness:  "f"{par['add_brightness']}","\n"
 
         " save source timeseries: "f"{par['ts_save']}","\n"
         
-        " manualy select appliances: "f"{par['manually_select_appliances']}","\n"
+        " manually select appliances: "f"{par['manually_select_appliances']}","\n"
 
         " number of appliances: "f"{len(par['appliances'])}","\n"
         " number of buildings: "f"{par['n_buildings']}","\n"
@@ -81,7 +81,7 @@ def print_begin_appliance(appliance: str, par: dict):
     Informs user what appliance will script process next. 
     """
     print_log(par,"\n")
-    print_log(par," Starting " f"{appliance} ("+str(par["appliances"].index(appliance)+1)+"/"+str(len(par["appliances"]))+"):")
+    print_log(par,"Starting " f"{appliance} ("+str(par["appliances"].index(appliance)+1)+"/"+str(len(par["appliances"]))+"):")
     # print("\n")
     # print(" Starting " f"{appliance} ("+str(par["appliances"].index(appliance)+1)+"/"+str(len(par["appliances"]))+"):")
 

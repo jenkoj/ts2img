@@ -5,7 +5,7 @@ def get_appliances(dataset: pd.DataFrame, par: dict) -> list:
     """
         Returns list of appliances. 
     """
-    if par["manaully_select_appliances"]:
+    if par["manually_select_appliances"]:
 
         if dataset.metadata["name"] == "REDD":
             # Appliances for REDD.
