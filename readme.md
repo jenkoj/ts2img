@@ -1,4 +1,4 @@
-# Timeseries to image converter 
+# Time Series to Image Converter for Energy Data
 
 Notebook uses [pyts](pyts.readthedocs.io) to trasform timeseries image data to either:
 
@@ -10,14 +10,22 @@ For easier data handling [NILMTK](https://github.com/nilmtk/nilmtk) was used.
 
 The converter offers a variety of parameters to set such as:
 
-* input timeseries window size,
-* output image size,
-* stacking n images (video),
-* adding brightness to GAF images,
-* trasfomation type,
-* using only one building,
-* manualty selecting appliances,
-* saving source time series.
+* input timeseries window size
+* output image size
+* stacking n images (video)
+* adding brightness to GAF images
+* trasfomation type
+* using only one building
+* manualty selecting appliances
+* saving source time series
+
+Works with all datasets supported by NILMTK, tested on:
+
+* REFIT
+* UKDALE
+* iAWE
+* REDD
+* ECO   
 
 # Example output 
 
