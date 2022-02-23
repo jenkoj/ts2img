@@ -1,6 +1,6 @@
 # Time Series to Image Converter for Energy Data
 
-Notebook uses [pyts](pyts.readthedocs.io) to trasform timeseries image data to either:
+Notebook uses [pyts](https://pyts.readthedocs.io) to trasform timeseries image data to either:
 
 * Gramian angluar summation fields
 * Gramian angluar difference fileds
