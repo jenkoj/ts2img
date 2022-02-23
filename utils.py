@@ -423,3 +423,189 @@ def append_images(img,img_stack, img_stack_tmp, sig, sig_stack, sig_stack_tmp, t
 
 
     return img_stack, img_stack_tmp, sig_stack, sig_stack_tmp, last_stamp
+
+
+def mount_data(meter: pd.DataFrame) -> np.ndarray:
+    """ 
+        Reads data from dataframe generator and resamples it to 6s.
+        In case active power cannot be mounted, it warns user and mounts apparent power. 
+    """
+    #read power data and write it to timeseries 
+
+    df = next(meter.load(physical_quantity='power'))
+
+    # possible implementation with bigger output
+    #df = df.resample('6s').bfill(limit=2)
+
+    df = df.resample("6s").asfreq()
+
+    tstamps = df.index.view(np.int64)//10**9
+
+    try:
+        ts = df.power.active.values.transpose()
+    except:
+        print("no active power!")
+        print_log("no active power!")
+        
+        try:
+            print("using apparent power!")
+            print_log("using apparent power!")
+            
+            ts = df.fillna(0).power.apparent.values.transpose()
+        
+        except:
+            print("no apparent power!")
+            print_log("no apparent power!")
+            
+            raise ValueError
+    
+    return [ts, tstamps]
+
+def all_equal(sig: np.ndarray) -> bool:
+    """
+        Checks if elements in input array are all equal. 
+    """
+    return True if np.min(sig)-np.max(sig) == 0 else False
+    
+
+def moving_window(x:np.ndarray, length:int, step:int=1) -> np.ndarray:
+    """
+        Slices input x to specified length and step. Remainder is dicarded. 
+    """
+    streams = it.tee(x, length)
+    
+    return np.asarray(list(zip(*[it.islice(stream, i, None, step*length) for stream, i in zip(streams, it.count(step=step))])))
+     
+
+def percent_nan(sig:np.ndarray) -> int:  
+    """
+        Return percent of missing data. 
+    """  
+    return (np.count_nonzero(~np.isnan(sig))/sig.shape[0])
+
+
+def fill_missing(sig:np.ndarray) -> np.ndarray:
+    """
+        Fill missing data first with backfill,then with forwardfill, finally convert to list and return it.
+    """
+    return np.asarray(pd.Series(sig).bfill().ffill().tolist())
+
+
+
+def filter_empty_slices_and_fill_missing_samples(signal_slices:np.ndarray, time_stamp_slices:np.ndarray, par: dict) -> np.ndarray:
+    """
+    Loop trough slices of signal data and remove data that has less that par["missing_data_allowed"], if more fill NaNs with bfill and ffill. 
+
+    :param: slignal_slices - np.array of singal slices
+    :param: time_stamp_slices - np.arrat of slices of time stamps
+
+    :return: signal_out, time_stamp_out - tuple of [np.ndarray np.ndarray] of processed slices
+    """
+    try:
+        signal_out, time_stamp_out =  zip(*[(fill_missing(sig), stamp) for sig, stamp in zip(signal_slices, time_stamp_slices) if percent_nan(sig) > par["percentage_of_missing_data_allowed"] ])
+
+    except ValueError:
+        # in case when nothing to return, list comprehension returns ValueError
+        signal_out, time_stamp_out = ([],[])
+
+    except: raise
+
+    return np.asarray(list(signal_out)), np.asarray(list(time_stamp_out))
+
+def filter_low_entropy_slices(signal_slices: np.ndarray, time_stamp_slices: np.ndarray, par: dict):
+    """ 
+    Removes slices with power less than 10W and slices that have all samples of the same value. 
+    """
+    try:
+        signal_out, time_stamp_out =  zip(*[[sig,stamp] for sig, stamp in zip(signal_slices, time_stamp_slices) if not all_equal(sig) and np.any(sig > 10) ])
+        
+    except ValueError:
+        # in case when nothing to return, list comprehension returns ValueError
+        signal_out, time_stamp_out = ([],[])
+        
+    except: raise
+
+    return np.asarray(list(signal_out)), np.asarray(list(time_stamp_out))
+
+def print_progress(i, signal_slices, img_stack, print_flag, par):
+    """
+    Prints current progress of transfomation every 10 %.
+    """
+    if round(100*i/(signal_slices.shape[0]),2) > print_flag:
+        print_flag += 10
+
+        print("procesed: "f"{round(100*i/(signal_slices.shape[0]),2)}% finished: "f"{round(100*((img_stack.shape[0])/par['max_images']),2)}%")
+        print_log(par,"procesed: "f"{round(100*i/(signal_slices.shape[0]),2)}% finished: "f"{round(100*((img_stack.shape[0])/par['max_images']),2)}%")
+    
+    return print_flag
+
+
+def print_break(par):
+    """
+    Informs user that maximum number of images has been reached. 
+    """
+    print("max size of "f"{par['max_images']}"" reached, skipping!")   
+    print_log(par,"max size of "f"{par['max_images']}"" reached, skipping!")
+
+def print_begin_appliance(appliance,par):
+    """
+    Informs user what appliance will script be processing. 
+    """
+    print_log(par,"\n")
+    print_log(par," Starting " f"{appliance} ("+str(par["appliances"].index(appliance)+1)+"/"+str(len(par["appliances"]))+"):")
+    print("\n")
+    print(" Starting " f"{appliance} ("+str(par["appliances"].index(appliance)+1)+"/"+str(len(par["appliances"]))+"):")
+
+def print_begin_building(building,par):
+    """
+    Informs user which building will scripb be processing. 
+    """
+    print("Starting building ",building)
+    print_log(par,"\n")
+    print_log(par,"Starting building "f"{building}")
+
+def print_end_of_loop(images_stacked,appliance,par):
+    """
+    Informs user that script has reached end of loop.
+    """
+    print_log(par,"")
+    print_log(par,"number of images (per appliance) stacked: "f"{images_stacked}")
+    print("")
+    print("number of images (per appliance) stacked: "f"{images_stacked}")
+
+    print_log(par,"finished "f"{appliance}")
+    print("finished "f"{appliance}")
+    
+    print("\n")
+    print_log(par,"\n")
+
+def print_end(all_images_stacked,healthy_appliances,par):
+    """
+    Informs user that script has come to an end.  
+    """
+    print_log(par,"num of images stored: ", all_images_stacked)
+    print("num of images stored: ", all_images_stacked)
+    print_log(par,"appliances stored: ", healthy_appliances)
+    print("appliances stored: ", healthy_appliances)
+
+def param_setup(dataset,par):
+    """
+    Sets up and fixes possible misconfiguration.
+    """
+    #get params from metadata 
+    par["dataset_name"] = dataset.metadata["name"].lower()
+    par["n_buildings"] = len(dataset.buildings)
+
+    #calculate time esitmated size of time series
+    par["ts_size"] = round(par["step_in_mins"]*60/par["sample_period"])
+
+    #fix parms 
+    #RECU already includes brightness 
+    if par["trs_type"] == "RECU": par["add_brightness"] = False
+
+    if par["multiple_buildings"]: par["selected_building"] = "A"
+        
+    #handle edge case for RECU
+    par["org_img_size"] = par["img_size"]
+
+    if par["trs_type"] == "RECU": par["img_size"] = par["ts_size"] 
