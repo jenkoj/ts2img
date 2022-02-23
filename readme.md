@@ -1,4 +1,4 @@
-# Timeseries to image converter 
+# Timeseries to Image Converter for Energy Data
 
 Notebook uses [pyts](pyts.readthedocs.io) to trasform timeseries image data to either:
 
@@ -18,6 +18,18 @@ The converter offers a variety of parameters to set such as:
 * using only one building,
 * manualty selecting appliances,
 * saving source time series.
+
+# Compatibility
+
+Works with all datasets supported by NILMTK.
+
+tested on:
+
+* REFIT
+* UKDALE
+* iAWE
+* REDD
+* ECO   
 
 # Example output 
 
