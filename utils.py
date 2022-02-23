@@ -2,8 +2,9 @@
 
 import datetime
 from fileinput import filename
-import re
+
 from tokenize import String
+from turtle import stamp
 import h5py
 import warnings
 from pyts.image import GramianAngularField
@@ -45,59 +46,48 @@ def print_parameters(par):
 
         " include multiple buildings (Y for Yes N for No): "f"{par['multiple_buildings']}","\n"
         " building selected: "f"{par['selected_building']}","\n"
-
     )
 
 
 def get_appliances(dataset,par):
-        #start and end date are generaly not used, except when using non-optimized verison
-    if dataset.metadata["name"] == "REDD":
-        par["start_date"] = "2010-1-10T0000"
-        par["end_date"] = "2012-5-20T0000"
-        #appliances for redd
-        #all
-        par["appliances"] = ["microwave","sockets","washer dryer", "dish washer","electric stove","electric oven","fridge","electric space heater","light","air conditioner","CE applaince","electric furnace","air handling unit"]
-        #short
-        #par["appliances"] = ["microwave"]
+    
+    if par["manauly_select_appliances"]:
+
+        if dataset.metadata["name"] == "REDD":
+            #appliances for redd
+            #all
+            par["appliances"] = ["microwave","sockets","washer dryer", "dish washer","electric stove","electric oven","fridge","electric space heater","light","air conditioner","CE applaince","electric furnace","air handling unit"]
+            #short
+            #par["appliances"] = ["microwave"]
+            
+        elif dataset.metadata["name"] == "iAWE":
+            #applicances for iawe 
+            par["appliances"] = ["fridge","television","clothes iron","washing machine","computer","air conditioner"]
+
+        elif dataset.metadata["name"] == "UK-DALE":
+            #appliances for ukdale
+            #all
+            par["appliances"] = ["microwave","toaster","kettle","HTPC","dish washer","server computer","washing machine","freezer","fridge freezer","desktop computer","light","computer monitor", "laptop computer", "television", "washer dryer","boiler","fridge"]
+            #short
+            #par["appliances"] = ["microwave","toaster","kettle"]
+
+        elif dataset.metadata["name"] == "REFIT":
+            #appliances for refit
+            par["appliances"] = ['washing machine','television','dish washer','fridge','computer',"toaster","washer dryer","tumble dryer","unknown","audio system","fridge freezer","electric space heater","food processor","broadband router","breadmaker","appliance","dehumidifier","fan","pond pump","games console"]
+            #short
+            #par["appliances"]= ["microwave","kettle","toaster"]
         
-    elif dataset.metadata["name"] == "iAWE":
-        par["start_date"] = "2013-1-18T1800"
-        par["end_date"] = "2013-12-18T1900"
-        #applicances for iawe 
-        par["appliances"] = ["fridge","television","clothes iron","washing machine","computer","air conditioner"]
+        elif dataset.metadata["name"] == "ECO":
+            #appliances for eco 
+            #all    
+            par["appliances"] = ["kettle","microwave","HTPC","freezer","fridge","coffee maker","computer","laptop computer","lamp","washing machine","dish washer","audio system","air handling unit","broadband router","garden sprinkler"]
+            #short
+            #par["appliances"] = ["kettle","microwave"]
 
-    elif dataset.metadata["name"] == "UK-DALE":
-        par["start_date"] = "2013-1-10T0000"
-        par["end_date"] = "2014-2-20T0000"
-        #appliances for ukdale
-        #all
-        par["appliances"] = ["microwave","toaster","kettle","HTPC","dish washer","server computer","washing machine","freezer","fridge freezer","desktop computer","light","computer monitor", "laptop computer", "television", "washer dryer","boiler","fridge"]
-        #short
-        #par["appliances"] = ["microwave","toaster","kettle"]
-
-    elif dataset.metadata["name"] == "REFIT":
-        par["start_date"] = "2013-10-10T0000"
-        par["end_date"] = "2015-8-20T0000"
-        #appliances for refit
-        par["appliances"] = ['washing machine','television','dish washer','fridge','computer',"toaster","washer dryer","tumble dryer","unknown","audio system","fridge freezer","electric space heater","food processor","broadband router","breadmaker","appliance","dehumidifier","fan","pond pump","games console"]
-        #short
-        #par["appliances"]= ["microwave","kettle","toaster"]
-       
-    elif dataset.metadata["name"] == "ECO":
-        par["start_date"] = "2012-06-10T0000"
-        par["end_date"] = "2013-03-20T0000"
-        #appliances for eco 
-        #all    
-        par["appliances"] = ["kettle","microwave","HTPC","freezer", "fridge", "coffee maker","computer","laptop computer","lamp","washing machine","dish washer","audio system","air handling unit","broadband router","garden sprinkler"]
-        #short
-        #par["appliances"] = ["kettle","microwave"]
+        else:
+            raise ValueError("Invalid dataset name") 
 
     else:
-        raise ValueError("Invalid dataset name") 
-
-    
-    if par["manauly_select_appliances"] == False:
-
         appliances = set()
         for building in dataset.buildings:
         
@@ -108,8 +98,7 @@ def get_appliances(dataset,par):
                 appliances.add(label)
                 
         par["appliances"] = list(appliances)
-
-
+    
 def print_log(par, *args, **kwargs):
     #print(*args, **kwargs)
     file_name = get_file_name(par)
@@ -347,54 +336,33 @@ def get_clean_data(df, pwr_flag, par):
     return ts
 
 
-def trasfrom_ts(ts,par):
+def trasfrom_ts(sig,par):
     """
     Returns image of timeseries 
 
     :param ts: timeseries power data
     :param par: dictionary of parameters 
     :return img: Returns image numpy array
-    :return ts_pad: Returns padded power data timeseries numpy array
+    :return sig: Returns padded power data timeseries numpy array
     """
 
-    #calculate mean value of timeseries, that will be multiplied to the matrix. 
-    with warnings.catch_warnings():
-        warnings.filterwarnings("error")
-        try:
-            ts_mean = ts[ts != 0].mean()
-        except RuntimeWarning:
-            #nadaljuj 
-            raise ValueError
-    
-    ts = ts[np.newaxis,:]
-
-    #do some timeseries reshaping and padding 
-    
-    # TODO probaj narest brez if elsa 
-    if ts.shape[1] <= par["ts_size"]:
-        #dodaj novo spremniljvko paddng 
-
-        ts_pad = np.pad(ts, [(0,0),(0, par["ts_size"]-ts.shape[1])], 'constant')
-    
-    else:
-        #handle edge case 
-        ts_pad = ts[:,:par["ts_size"]]
+    sig = sig[np.newaxis,:]
 
     #recurrence transform
     if par["trs_type"] == "RECU":
         rp = RecurrencePlot(threshold=None)
-        img = rp.fit_transform(ts_pad)
+        img = rp.fit_transform(sig)
 
     #gaf transform
     if par["trs_type"] == "GAF":
         
         if par["trs_type_gaf"] == "GASF":
             gasf = GramianAngularField(image_size=par["img_size"], method='summation')
-            img = gasf.fit_transform(ts_pad)
+            img = gasf.fit_transform(sig)
 
         elif par["trs_type_gaf"] == "GADF":
             gadf = GramianAngularField(image_size=par["img_size"], method='difference')
-            img = gadf.fit_transform(ts_pad)
+            img = gadf.fit_transform(sig)
 
         else:
             raise ValueError("GAF type not defined!")
@@ -403,13 +371,13 @@ def trasfrom_ts(ts,par):
     
     #multiply mean
     if par["add_brightness"] == "Y":
-        img = img*ts_mean
+        sig_mean = np.true_divide(sig.sum(),(sig!=0).sum())
+        img = img*sig_mean
     
-    return img, ts_pad
+    return sig, img
 
-#TODO split images and timeseries to two functions 
-#TODO define img_stack tmp for normal append
-def append_images(img,img_stack, img_stack_tmp, ts_pad, ts_stack, ts_stack_tmp, interval, last_interval, par):
+
+def append_images(img,img_stack, img_stack_tmp, sig, sig_stack, sig_stack_tmp, time_stamp, last_stamp, par):
     """
     Appends images and ts 
 
@@ -417,53 +385,41 @@ def append_images(img,img_stack, img_stack_tmp, ts_pad, ts_stack, ts_stack_tmp, 
     :param img_stack: stack of past images numpy array
     :param img_stack_tmp: stack of temp images for n_dim images numpy array
 
-    :param ts_pad: padded timeseries numpy array
-    :param ts_stack: stack of past timeseries numpy array
-    :param ts_stack_tmp: stack of temp images for n_dim images numpy array
+    :param sig: padded timeseries numpy array
+    :param sig_stack: stack of past time series numpy array
+    :param sig_stack_tmp: stack of temp images for n_dim images numpy array
 
-    :param interval: current intreval int
-    :param last_interval: for tracking diff between images int
+    :param time_stamp: current intreval int
+    :param last_stamp: for tracking diff between images int
     :param par: dictionary of user defined parameters 
 
     :return: None
     """
     
-    #part where we save converted images
-    if len(img_stack.shape) == 4:
-        #append as multi dimensonal images 
+    delta = time_stamp[0] - last_stamp
+    last_stamp = time_stamp[-1]
 
-        if img_stack_tmp.shape[0] < par["frames"]:
-            #images in multi dim array must be in strict series order
-            delta_interval = interval - last_interval 
-            last_interval = interval
-            
-            if delta_interval <= par["allowed_delta_between_images"]: 
-                #append, images are strictly in series
-                img_stack_tmp = np.append(img_stack_tmp, img, axis=0)
-                ts_stack_tmp = np.append(ts_stack_tmp, ts_pad, axis=0)
+    if delta <= par["allowed_delta_between_images"] or img_stack_tmp.shape[0] == 0: 
+        #append only if images are strictly in series
+        img_stack_tmp = np.append(img_stack_tmp, img, axis=0)
+        sig_stack_tmp = np.append(sig_stack_tmp, sig, axis=0)
 
-            else:
-                #reset stack to 0
-                ts_stack_tmp = np.zeros([0, par["ts_size"]])
-                img_stack_tmp = np.zeros([0, par["img_size"], par["img_size"]])
-
-        else:
-            #full   
+        if img_stack_tmp.shape[0] == par["frames"]:
+            #append to main
             img_stack_tmp = img_stack_tmp[np.newaxis, ...] #add new axis for compatability
             img_stack = np.append(img_stack, img_stack_tmp, axis=0)
             
-            ts_stack_tmp = ts_stack_tmp[np.newaxis, ...] #add new axis for compatability
-            ts_stack = np.append(ts_stack, ts_stack_tmp, axis=0)
+            sig_stack_tmp = sig_stack_tmp[np.newaxis, ...] #add new axis for compatability
+            sig_stack = np.append(sig_stack, sig_stack_tmp, axis=0)
 
             #reset stack to 0
-            ts_stack_tmp = np.zeros([0, par["ts_size"]])
+            sig_stack_tmp = np.zeros([0, par["ts_size"]])
             img_stack_tmp = np.zeros([0, par["img_size"], par["img_size"]])
 
     else:
-        #append as ordinary images
-        img_stack = np.append(img_stack, img, axis=0)
-        ts_stack = np.append(ts_stack, ts_pad, axis=0)
-       
+        #if not, reset stack to 0
+        sig_stack_tmp = np.zeros([0, par["ts_size"]])
+        img_stack_tmp = np.zeros([0, par["img_size"], par["img_size"]])
 
 
-    return img_stack, img_stack_tmp, ts_stack, ts_stack_tmp
+    return img_stack, img_stack_tmp, sig_stack, sig_stack_tmp, last_stamp
