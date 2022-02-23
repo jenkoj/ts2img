@@ -5,14 +5,14 @@ from file_handling import get_file_name, get_path
 path = get_path()
 
 
-def print_parameters(par: dict) -> None:
+def print_parameters(appliances: list, par: dict) -> None:
     """
     Prints user defined parameters. 
     """
     print_log(par,
         "dataset name: ",par["dataset_name"],", date : ",datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')," \n"
 
-        " using appliances: ",par["appliances"],"\n"
+        " using appliances: ", appliances,"\n"
 
         " transtype: ",par["trs_type"],"\n"
         " gaf trans type: "f"{par['trs_type_gaf']}","\n"
@@ -42,6 +42,9 @@ def print_parameters(par: dict) -> None:
 
 
 def print_log(par: dict, *args, **kwargs):
+    """
+    Prints log to stdout and file. 
+    """
     print(*args, **kwargs)
     file_name = get_file_name(par)
 
