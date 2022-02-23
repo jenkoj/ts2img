@@ -48,12 +48,12 @@ Trasfomation examples for selected appliances
 
     *  ❗️ You may need to downgrade Matplotlib to an older version due to dependency-related issues.
 
-* Install [pyts](pyts.readthedocs.io) by running:
+* Install [pyts](https://pyts.readthedocs.io) by running:
 
     ```bash
         pip install pyts
     ```
-* Install [h5py](h5py.org) by running:
+* Install [h5py](https://www.h5py.org) by running:
 
     ```bash
         pip install h5py
