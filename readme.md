@@ -19,11 +19,7 @@ The converter offers a variety of parameters to set such as:
 * manualty selecting appliances,
 * saving source time series.
 
-# Compatibility
-
-Works with all datasets supported by NILMTK.
-
-tested on:
+Works with all datasets supported by NILMTK, tested on:
 
 * REFIT
 * UKDALE
