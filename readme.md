@@ -1,25 +1,25 @@
 # Time Series to Image Converter for Energy Data
 
-Notebook uses [pyts](https://pyts.readthedocs.io) to trasform timeseries image data to either:
+Notebook uses [pyts](https://pyts.readthedocs.io) to transform time series image data to:
 
-* Gramian angluar summation fields
-* Gramian angluar difference fileds
-* Reccurence plots 
+* Gramian angular summation fields
+* Gramian angular difference fields
+* recurrence plots 
 
 For easier data handling [NILMTK](https://github.com/nilmtk/nilmtk) was used. 
 
 The converter offers a variety of parameters to set such as:
 
-* input timeseries window size
+* input time series window size
 * output image size
-* stacking n images (video)
-* adding brightness to GAF images
-* trasfomation type
-* using only one building
-* manualty selecting appliances
-* saving source time series
+* stacking n images as a video
+* adding brightness to the GAF images
+* choosing between Gramian angular fields or recurrence plots
+* using only a selected building
+* manually selecting the appliances
+* saving the source time series
 
-Works with all datasets supported by NILMTK, tested on:
+Works with all datasets supported by NILMTK. Tested on:
 
 * REFIT
 * UKDALE
@@ -27,44 +27,52 @@ Works with all datasets supported by NILMTK, tested on:
 * REDD
 * ECO   
 
-# Example output 
+# Example Output 
 
-Examples bellow are gramian angle summation filed images trasfomered using UK-DALE dataset and 60-minute window.
+Examples below are Gramian angle summation filed images transformed using UKDALE dataset over a 60-minute window.
 
-Computer monitor and washing machine examples
+Computer monitor and washing machine examples:
 <p float="center">
     <img src="/imgs/iawe-computer-gasf.png" width="250" />
     <img src="/imgs/iawe-washm-gaf.png" width="250" />
 </p>
 
-Trasfomation examples for selected appliances
+Examples for selected appliances:
 <p float="center">
-    <img src="/imgs/gaf_matrix.png" width="700" />
+    <img src="/imgs/gaf_matrix.png" width="600" />
 </p>
 
-# Install instructions  
+# Install Instructions  
+  
+❗️ If possible, install on a Linux machine.
 
-* Install [NILMTK](https://github.com/nilmtk/nilmtk) by following instructions [here](https://github.com/nilmtk/nilmtk/blob/master/docs/manual/user_guide/install_user.md).
+* 1. Install [Anaconda](https://anaconda.org) by following instructions [here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html).
 
-    *  ❗️ You may need to downgrade Matplotlib to an older version due to dependency-related issues.
 
-* Install [pyts](https://pyts.readthedocs.io) by running:
-
-    ```bash
-        pip install pyts
-    ```
-* Install [h5py](https://www.h5py.org) by running:
+* 2. Create a new environment by changing the directory to conda and running:
 
     ```bash
-        pip install h5py
+        conda env create --name ts2img --file=ts2img.yml 
+    ```
+* 3. Activate the newly created environment 
+
+    ```bash
+        conda activate ts2img
     ```
 
-*  Get hold of a converted dataset or convert your dataset.
+* 4. Get hold of a dataset converted to NILMTK format or convert your dataset.
 
     * Check if your dataset has supported converter [link](https://github.com/nilmtk/nilmtk/blob/master/docs/source/nilmtk.dataset_converters.rst), if not you can write your own dataset converter by following instructions [here](https://github.com/nilmtk/nilmtk/blob/master/docs/manual/development_guide/writing_a_dataset_converter.md).
 
     * Convert your dataset by following notebook [here](https://github.com/nilmtk/nilmtk/blob/master/docs/manual/user_guide/data.ipynb).
 
-* Place converted dataset in same directory as notebook.
+* 5. Place converted dataset in datasets directory.
 
-* Set parameters and run the script.
+* 6. Set parameters.
+
+* 7. Finally, run:
+    ```bash
+        ipython -c "%run converter.ipynb"
+    ```
+When adjusting the parameters start with iAWE. Since it is small, it is easy to handle. 
+
