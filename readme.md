@@ -52,7 +52,7 @@ Examples for selected appliances:
 
 2.  Clone this repository and change directory to conda:
   
-  ```bash
+    ```bash
         cd /ts2img/conda
     ```
 
