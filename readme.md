@@ -50,7 +50,11 @@ Examples for selected appliances:
 
 1.  Install [Anaconda](https://anaconda.org) by following instructions [here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html).
 
-2.  Clone this repository and change directory to "/ts2img/conda"
+2.  Clone this repository and change directory to conda:
+  
+  ```bash
+        cd /ts2img/conda
+    ```
 
 3.  Create a new environment by running:
 
