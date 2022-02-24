@@ -1,0 +1,5 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: osx-64
+@EXPLICIT
+https://anaconda.org/nilmtk/nilmtk/0.4.3/download/noarch/nilmtk-0.4.3-py_0.tar.bz2
