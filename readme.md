@@ -19,6 +19,8 @@ The converter offers a variety of parameters to set such as:
 * manually selecting the appliances
 * saving the source time series
 
+environment 
+
 Works with all datasets supported by NILMTK. Tested on:
 
 * REFIT
@@ -46,31 +48,32 @@ Examples for selected appliances:
   
 ❗️ If possible, install on a Linux machine.
 
-* 1. Install [Anaconda](https://anaconda.org) by following instructions [here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html).
+1.  Install [Anaconda](https://anaconda.org) by following instructions [here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html).
 
+2.  Clone this repository and change directory to "/ts2img/conda"
 
-* 2. Create a new environment by changing the directory to conda and running:
+3.  Create a new environment by running:
 
     ```bash
         conda env create --name ts2img --file=ts2img.yml 
     ```
-* 3. Activate the newly created environment 
+4.  Activate the newly created environment 
 
     ```bash
         conda activate ts2img
     ```
 
-* 4. Get hold of a dataset converted to NILMTK format or convert your dataset.
+5.  Get hold of a dataset converted to NILMTK format or convert your dataset.
 
     * Check if your dataset has supported converter [link](https://github.com/nilmtk/nilmtk/blob/master/docs/source/nilmtk.dataset_converters.rst), if not you can write your own dataset converter by following instructions [here](https://github.com/nilmtk/nilmtk/blob/master/docs/manual/development_guide/writing_a_dataset_converter.md).
 
     * Convert your dataset by following notebook [here](https://github.com/nilmtk/nilmtk/blob/master/docs/manual/user_guide/data.ipynb).
 
-* 5. Place converted dataset in datasets directory.
+6.  Place converted dataset in datasets directory.
 
-* 6. Set parameters.
+7.  Set parameters.
 
-* 7. Finally, run:
+8.  Finally, run:
     ```bash
         ipython -c "%run converter.ipynb"
     ```
