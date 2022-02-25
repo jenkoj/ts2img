@@ -13,3 +13,13 @@
     * iAWE
     * REDD
     * ECO  
+
+* You can try running this command to download few converted datasets:
+
+    ```bash
+       cd datasets
+    ```
+    ```bash
+       gdown --folder --id 1oHzjdKdm0jliuYfHu0IOzNtqOPU6a41f
+    ```
+ 
