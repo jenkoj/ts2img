@@ -20,7 +20,7 @@ def print_parameters(par: dict) -> None:
         " windows size in mins: "f"{par['step_in_mins']}","\n"
         " image size in pixels: "f"{par['img_size']}","\n"
 
-        " sample period: "f"{par['sample_period']}","\n"
+        " sample period: "f"{par['resample_period']}","\n"
 
         " number if images that are stacked together and in series(series!): "f"{par['frames']}","\n"
         " allowed max delta between images  "f"{par['allowed_delta_between_frames']}","\n"
@@ -71,21 +71,6 @@ def print_break(par: dict):
     Informs user that maximum number of images has been reached. 
     """
     print_log(par,"max size of "f"{par['max_images']}"" reached, skipping!")
-
-
-def print_begin_appliance(appliance: str, par: dict):
-    """
-    Informs user what appliance will script process next. 
-    """
-    print_log(par,"\n")
-    print_log(par,"Starting " f"{appliance} ("+str(par["appliances"].index(appliance)+1)+"/"+str(len(par["appliances"]))+"):")
-
-def print_begin_building(building: int, par: dict):
-    """
-    Informs user which building will script be processing. 
-    """
-    print_log(par,"\n")
-    print_log(par,"Starting building "f"{building}")
 
 
 def print_end_of_loop(images_stacked: int, appliance: str, par: dict):
