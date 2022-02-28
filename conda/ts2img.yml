@@ -172,3 +172,4 @@ dependencies:
     - peakdetect==1.1
     - tqdm==4.54.1
     - wget==3.2
+    - gdown
