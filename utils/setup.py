@@ -1,3 +1,4 @@
+import warnings
 import pandas as pd
 
 
@@ -66,10 +67,12 @@ def param_setup(dataset: pd.DataFrame, par: dict) -> None:
     par["n_buildings"] = len(dataset.buildings)
 
     # Calculate estimated size of time series.
-    par["ts_size"] = round(par["step_in_mins"]*60/par["sample_period"])
+    par["ts_size"] = round((par["step_in_mins"]*60)/par["resample_period"])
 
     # RECU already includes brightness.
-    if par["trs_type"] == "RECU": par["add_brightness"] = False
+    if par["trs_type"] == "RECU": 
+        warnings.warn("Warning........... Reccurrent plots already include brightness!")
+        par["add_brightness"] = False
 
     # When using all buildings parameter selected_building must be A.
     if par["multiple_buildings"]: par["selected_building"] = "A"
@@ -77,5 +80,8 @@ def param_setup(dataset: pd.DataFrame, par: dict) -> None:
     # Handle edge case for RECU.
     par["org_img_size"] = par["img_size"]
 
-    # In case of reccurent plot input size must be same as output.
+    # In case of reccurrent plot input size must be same as output.
     if par["trs_type"] == "RECU": par["img_size"] = par["ts_size"] 
+
+    if par["backfill_limit"] > (par["ts_size"] / 2):
+         warnings.warn("Warning........... par['backfill_limit'] is too large, it could resampling could result in invalid time series data.")
