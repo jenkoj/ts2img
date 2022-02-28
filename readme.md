@@ -12,6 +12,7 @@ The converter offers a variety of parameters to set such as:
 
 * input time series window size
 * output image size
+* resample period
 * stacking n images as a video
 * adding brightness to the GAF images
 * choosing between Gramian angular fields or recurrence plots
@@ -61,7 +62,7 @@ Examples for selected appliances:
     ```bash
         conda env create --name ts2img --file=ts2img.yml 
     ```
-4.  Activate the newly created environment 
+4.  Activate the newly created environment:
 
     ```bash
         conda activate ts2img
