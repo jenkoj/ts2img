@@ -54,16 +54,14 @@ def print_log(par: dict, *args, **kwargs):
 
 def print_progress(i: int, signal_stack: np.ndarray, img_stack: np.ndarray, print_flag:int, par: dict) -> int:
     """
-    Prints current progress of transfomation every 10 %.
+    Prints current progress of transformation every 10 %.
     """
     signal_slices_len = signal_stack.shape[0]
     img_stack_len = img_stack.shape[0]
 
     if round(100*i/(signal_slices_len),2) > print_flag:
         print_flag += 10
-
-        #print("procesed: "f"{round(100*i/(signal_slices.shape[0]),2)}% finished: "f"{round(100*((img_stack.shape[0])/par['max_images']),2)}%")
-        print_log(par,"procesed: "f"{round(100*i/(signal_slices_len),2)} % finished: "f"{round(100*((img_stack_len)/par['max_images']),2)} %")
+        print_log(par,"processed: "f"{round(100*i/(signal_slices_len),2)} % finished: "f"{round(100*((img_stack_len)/par['max_images']),2)} %")
     
     return print_flag
 
@@ -72,7 +70,6 @@ def print_break(par: dict):
     """
     Informs user that maximum number of images has been reached. 
     """
-    #print("max size of "f"{par['max_images']}"" reached, skipping!")   
     print_log(par,"max size of "f"{par['max_images']}"" reached, skipping!")
 
 
@@ -82,15 +79,11 @@ def print_begin_appliance(appliance: str, par: dict):
     """
     print_log(par,"\n")
     print_log(par,"Starting " f"{appliance} ("+str(par["appliances"].index(appliance)+1)+"/"+str(len(par["appliances"]))+"):")
-    # print("\n")
-    # print(" Starting " f"{appliance} ("+str(par["appliances"].index(appliance)+1)+"/"+str(len(par["appliances"]))+"):")
-
 
 def print_begin_building(building: int, par: dict):
     """
     Informs user which building will script be processing. 
     """
-    #print("Starting building ",building)
     print_log(par,"\n")
     print_log(par,"Starting building "f"{building}")
 
@@ -99,11 +92,9 @@ def print_end_of_loop(images_stacked: int, appliance: str, par: dict):
     """
     Informs user that script has reached the end of the loop.
     """
-    print_log(par,"")
+    print_log(par,"\n")
     print_log(par,"number of images (per appliance) stacked: "f"{images_stacked}")
-    # print("")
-    # print("number of images (per appliance) stacked: "f"{images_stacked}")
-
+    
     print_log(par,"finished "f"{appliance}")
     #print("finished "f"{appliance}")
     
@@ -116,6 +107,4 @@ def print_end(all_images_stacked: int, healthy_appliances: int, par: dict):
     Informs user that script has come to an end.  
     """
     print_log(par,"num of images stored: ", all_images_stacked)
-    #print("num of images stored: ", all_images_stacked)
     print_log(par,"appliances stored: ", healthy_appliances)
-    #print("appliances stored: ", healthy_appliances)

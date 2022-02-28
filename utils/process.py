@@ -6,19 +6,19 @@ from pyts.image import RecurrencePlot
 
 def moving_window(x:np.ndarray, length:int, step:int=1) -> np.ndarray:
     """
-    Slices input x to specified length and step. Remainder is dicarded. 
+    Slices input x to specified length and step. Remainder is discarded. 
     """
     streams = it.tee(x, length)
     return np.asarray(list(zip(*[it.islice(stream, i, None, step*length) for stream, i in zip(streams, it.count(step=step))])))
 
 
-def trasfrom_ts(sig: np.ndarray, par:dict):
+def transform_ts(sig: np.ndarray, par:dict):
     """
     Returns image of input time series signal.
 
     :param sig: Time series power signal.
     :param par: Dictionary of parameters. 
-    :return img: Trasformed image.
+    :return img: Transformed image.
     :return sig: Time series power signal. 
     """
 
