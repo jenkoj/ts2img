@@ -11,16 +11,16 @@ def mount_data(meter: pd.DataFrame, par: dict) -> np.ndarray:
     # Load power meter data.
     df = next(meter.load(physical_quantity='power'))
 
-    # Possible implementation that yileds larger output.
-    # df = df.resample('6s').bfill(limit=2)
+    # Resample power data to "6s" and in case data is missing, back fill 10 samples
+    df = df.resample('6s').bfill(limit=10)
 
-    # Resample power data to "6s". 
-    df = df.resample("6s").asfreq()
+    # Implementation with no backfill, resamples power data to "6s", works only when sample rate of source data set it 6s.
+    #df = df.resample("6s").asfreq()
 
     # Get time stamps. 
     time_stamps = df.index.view(np.int64)//10**9
 
-    # Try mount active power, if unsucessfull use apparent.
+    # Try mount active power, if unsuccessful use apparent.
     try:
         ts = df.power.active.values.transpose()
     except:
