@@ -16,10 +16,16 @@
 
 * You can try running this command to download few converted datasets:
 
-    ```bash
-       cd datasets
-    ```
-    ```bash
-       gdown --folder --id 1oHzjdKdm0jliuYfHu0IOzNtqOPU6a41f
-    ```
+   * Change directory to datasets:
+   ```bash
+      cd datasets
+   ```
+   * Download source folder:
+   ```bash
+      gdown --folder --id 1oHzjdKdm0jliuYfHu0IOzNtqOPU6a41f
+   ```
+   * Move elements from source folder to datasets folder:
+   ```bash
+      cd source && mv * ../ && cd ..
+   ```
  
