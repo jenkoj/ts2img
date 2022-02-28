@@ -96,9 +96,6 @@ def print_end_of_loop(images_stacked: int, appliance: str, par: dict):
     print_log(par,"number of images (per appliance) stacked: "f"{images_stacked}")
     
     print_log(par,"finished "f"{appliance}")
-    #print("finished "f"{appliance}")
-    
-    #print("\n")
     print_log(par,"\n")
 
 
