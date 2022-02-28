@@ -24,14 +24,11 @@ def mount_data(meter: pd.DataFrame, par: dict) -> np.ndarray:
     try:
         ts = df.power.active.values.transpose()
     except:
-        print("no active power!")
         print_log(par,"no active power!")
         try:
-            print("using apparent power!")
             print_log(par,"using apparent power!")
             ts = df.fillna(0).power.apparent.values.transpose()
         except:
-            print("no apparent power!")
             print_log(par,"no apparent power!")
             raise ValueError
     
