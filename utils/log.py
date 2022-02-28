@@ -70,7 +70,7 @@ def print_break(par: dict):
     """
     Informs user that maximum number of images has been reached. 
     """
-    print_log(par,"max size of "f"{par['max_images']}"" reached, skipping!")
+    print_log(par,"max size of "f"{par['max_images']} reached, skipping!")
 
 
 def print_end_of_loop(images_stacked: int, appliance: str, par: dict):
