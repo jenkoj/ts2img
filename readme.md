@@ -53,7 +53,7 @@ Examples for selected appliances:
 2.  Clone this repository and change directory to conda:
   
     ```bash
-        cd /ts2img/conda
+        git clone https://github.com/jenkoj/ts2img && cd ts2img/conda
     ```
 
 3.  Create a new environment by running:
