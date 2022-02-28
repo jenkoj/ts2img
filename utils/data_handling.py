@@ -12,7 +12,7 @@ def mount_data(meter: pd.DataFrame, par: dict) -> np.ndarray:
     df = next(meter.load(physical_quantity='power'))
 
     # Resample power data to "6s" and in case data is missing, back fill 10 samples
-    df = df.resample(''f'{par["resample_rate"]}s').bfill(limit=par["backfill_limit"])
+    df = df.resample(''f'{par["resample_period"]}s').bfill(limit=par["backfill_limit"])
 
     # Implementation with no backfill, resamples power data to "6s", works only when sample rate of source data set it 6s.
     #df = df.resample("6s").asfreq()
