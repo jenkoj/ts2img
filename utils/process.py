@@ -21,7 +21,7 @@ def transform_ts(sig: np.ndarray, par:dict):
     :return img: Transformed image.
     :return sig: Time series power signal. 
     """
-
+    # Add new axis for compatibility.
     sig = sig[np.newaxis,:]
 
     # Recurrence plot
@@ -46,9 +46,9 @@ def transform_ts(sig: np.ndarray, par:dict):
         raise ValueError("trs type not defined!")
     
     # Multiply image with non-zero mean of the signal.
-    if par["add_brightness"] == "Y":
-        sig_mean = np.true_divide(sig.sum(),(sig!=0).sum())
-        img = img*sig_mean
+    if par["add_brightness"]:
+        sig_mean = np.true_divide(sig.sum(), (sig!=0).sum())
+        img = img * sig_mean
     
     return sig, img
 

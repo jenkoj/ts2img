@@ -52,27 +52,20 @@ def print_log(par: dict, *args, **kwargs):
         print(*args, **kwargs, file=file)
 
 
-def print_progress(i: int, signal_stack: np.ndarray, img_stack: np.ndarray, print_flag:int, par: dict) -> int:
+def print_progress(i: int, signal_stack: np.ndarray, img_stack: np.ndarray, next_percent:int, par: dict) -> int:
     """
     Prints current progress of transformation every 10 %.
     """
     signal_slices_len = signal_stack.shape[0]
     img_stack_len = img_stack.shape[0]
-
-    if round(100*i/(signal_slices_len),2) > print_flag:
-        print_flag += 10
-        print_log(par,"processed: "f"{round(100*i/(signal_slices_len),2)} % finished: "f"{round(100*((img_stack_len)/par['max_images']),2)} %")
     
-    return print_flag
+    if round(100*i/(signal_slices_len),2) > next_percent:
+        next_percent += 10
+        print_log(par,"processed: "f"{round(100*i/(signal_slices_len), 2)} % finished: "f"{round(100*((img_stack_len)/par['max_images']), 2)} %")
+    
+    return next_percent
 
-
-def print_break(par: dict):
-    """
-    Informs user that maximum number of images has been reached. 
-    """
-    print_log(par,"max size of "f"{par['max_images']} reached, skipping!")
-
-
+    
 def print_end_of_loop(images_stacked: int, appliance: str, par: dict):
     """
     Informs user that script has reached the end of the loop.

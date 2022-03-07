@@ -10,14 +10,14 @@ def mount_data(meter: pd.DataFrame, par: dict) -> np.ndarray:
     """ 
     # Load power meter data.
     df = next(meter.load(physical_quantity='power'))
-
+    
     # Resample power data to "6s" and in case data is missing, back fill 10 samples
-    df = df.resample(''f'{par["resample_period"]}s').bfill(limit=par["backfill_limit"])
+    df = df.resample(''f'{par["resample_period"]}s').ffill(limit=par["fill_limit"])
 
     # Implementation with no backfill, resamples power data to "6s", works only when sample rate of source data set it 6s.
     #df = df.resample("6s").asfreq()
 
-    # Get time stamps. 
+    # Get time stamps. ## check why 10^9
     time_stamps = df.index.view(np.int64)//10**9
 
     # Try mount active power, if unsuccessful use apparent.
@@ -27,7 +27,7 @@ def mount_data(meter: pd.DataFrame, par: dict) -> np.ndarray:
         print_log(par,"no active power!")
         try:
             print_log(par,"using apparent power!")
-            ts = df.fillna(0).power.apparent.values.transpose()
+            ts = df.power.apparent.values.transpose()
         except:
             print_log(par,"no apparent power!")
             raise ValueError
