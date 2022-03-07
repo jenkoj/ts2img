@@ -1,7 +1,6 @@
 import warnings
 import pandas as pd
 
-
 def get_appliances(dataset: pd.DataFrame, par: dict) -> list:
     """
         Returns list of appliances. 
@@ -16,7 +15,7 @@ def get_appliances(dataset: pd.DataFrame, par: dict) -> list:
             # par["appliances"] = ["microwave"]
             
         elif dataset.metadata["name"] == "iAWE":
-            # Applicances for iAWE. 
+            # Appliances for iAWE. 
             appliances = ["fridge","television","clothes iron","washing machine","computer","air conditioner"]
 
         elif dataset.metadata["name"] == "UK-DALE":
@@ -52,11 +51,10 @@ def get_appliances(dataset: pd.DataFrame, par: dict) -> list:
                 label = appliance_metadata.get("type")
                 appliances.add(label)
 
-        # Get rid of duplicates.     
+        # Remove duplicates.     
         appliances = list(appliances)
     
     return appliances
-
 
 def param_setup(dataset: pd.DataFrame, par: dict) -> None:
     """
@@ -83,5 +81,5 @@ def param_setup(dataset: pd.DataFrame, par: dict) -> None:
     # In case of reccurrent plot input size must be same as output.
     if par["trs_type"] == "RECU": par["img_size"] = par["ts_size"] 
 
-    if par["backfill_limit"] > (par["ts_size"] / 2):
-         warnings.warn("Warning........... par['backfill_limit'] is too large, it could resampling could result in invalid time series data.")
+    if par["fill_limit"] > (par["ts_size"] / 2):
+         warnings.warn("Warning........... par['fill_limit'] is too large, it could resampling could result in invalid time series data.")
